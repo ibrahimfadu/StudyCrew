@@ -1,10 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { AnimatedLogo } from "./animated-logo"
 
 export function Navigation() {
   const pathname = usePathname()
@@ -28,9 +28,8 @@ export function Navigation() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2 hover-scale transition-transform duration-200">
-          <Image src="/logo.png" alt="StudyCrew.AI" width={32} height={32} className="rounded-full" />
-          <span className="font-bold text-xl">StudyCrew.AI</span>
+        <Link href="/" className="hover-scale transition-transform duration-200">
+          <AnimatedLogo size={40} showText={true} />
         </Link>
 
         <div className="flex items-center space-x-4">
@@ -40,7 +39,9 @@ export function Navigation() {
             </Button>
           </Link>
           <Link href="/signup">
-            <Button className="hover-lift hover-glow transition-all duration-300">Sign Up</Button>
+            <Button className="hover-lift hover-glow transition-all duration-300 bg-gradient-to-r from-blue-600 to-green-500 hover:from-blue-700 hover:to-green-600">
+              Sign Up Free 🎓
+            </Button>
           </Link>
         </div>
       </div>

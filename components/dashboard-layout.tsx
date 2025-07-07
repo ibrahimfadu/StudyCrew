@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LayoutDashboard, Plus, BarChart3, Users, MessageSquare, Settings, ChevronUp, User, LogOut } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import Image from "next/image"
+import { AnimatedLogo } from "./animated-logo"
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
@@ -39,10 +39,12 @@ function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
-                <Image src="/logo.png" alt="StudyCrew.AI" width={32} height={32} className="rounded-full" />
+                <AnimatedLogo size={32} showText={false} />
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">StudyCrew.AI</span>
-                  <span className="truncate text-xs">AI Study Planner</span>
+                  <span className="truncate font-semibold bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">
+                    StudyCrew.AI
+                  </span>
+                  <span className="truncate text-xs text-muted-foreground">🚀 AI Study Planner</span>
                 </div>
               </Link>
             </SidebarMenuButton>
