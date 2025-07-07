@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { FadeInSection } from "@/components/fade-in-section"
 import { AnimatedCounter } from "@/components/animated-counter"
+import Image from "next/image"
 
 export default function HomePage() {
   return (
@@ -222,8 +223,8 @@ export default function HomePage() {
             <div className="grid md:grid-cols-4 gap-8">
               <div>
                 <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                  <Brain className="h-6 w-6 text-blue-600" />
-                  StudyCrew
+                  <Image src="/logo.png" alt="StudyCrew.AI" width={24} height={24} className="rounded-full" />
+                  StudyCrew.AI
                 </h3>
                 <p className="text-muted-foreground">AI-powered study planning for modern students</p>
               </div>

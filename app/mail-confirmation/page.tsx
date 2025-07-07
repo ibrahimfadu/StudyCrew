@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, Mail, RefreshCw } from "lucide-react"
+import { CheckCircle, RefreshCw } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import Image from "next/image"
 
 export default function MailConfirmationPage() {
   const [isResending, setIsResending] = useState(false)
@@ -28,7 +29,7 @@ export default function MailConfirmationPage() {
         <CardHeader>
           <div className="flex justify-center mb-4">
             <div className="relative">
-              <Mail className="h-16 w-16 text-blue-600" />
+              <Image src="/logo.png" alt="StudyCrew.AI" width={64} height={64} className="rounded-full" />
               <CheckCircle className="h-6 w-6 text-green-600 absolute -top-1 -right-1 bg-background rounded-full" />
             </div>
           </div>

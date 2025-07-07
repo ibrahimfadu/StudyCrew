@@ -7,11 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Brain } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
+import Image from "next/image"
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -48,7 +48,7 @@ export default function SignUpPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <Brain className="h-12 w-12 text-blue-600" />
+            <Image src="/logo.png" alt="StudyCrew.AI" width={48} height={48} className="rounded-full" />
           </div>
           <CardTitle className="text-2xl">Join StudyCrew</CardTitle>
           <CardDescription>Create your account to get started</CardDescription>

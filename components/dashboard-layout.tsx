@@ -15,20 +15,10 @@ import {
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  LayoutDashboard,
-  Plus,
-  BarChart3,
-  Users,
-  MessageSquare,
-  Settings,
-  Brain,
-  ChevronUp,
-  User,
-  LogOut,
-} from "lucide-react"
+import { LayoutDashboard, Plus, BarChart3, Users, MessageSquare, Settings, ChevronUp, User, LogOut } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
@@ -49,9 +39,9 @@ function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
-                <Brain className="h-8 w-8 text-blue-600" />
+                <Image src="/logo.png" alt="StudyCrew.AI" width={32} height={32} className="rounded-full" />
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">StudyCrew</span>
+                  <span className="truncate font-semibold">StudyCrew.AI</span>
                   <span className="truncate text-xs">AI Study Planner</span>
                 </div>
               </Link>
