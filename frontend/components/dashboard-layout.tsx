@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,9 +12,14 @@ import {
   SidebarProvider,
   SidebarTrigger,
   SidebarInset,
-} from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+} from "@/components/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   LayoutDashboard,
   Plus,
@@ -26,9 +31,11 @@ import {
   ChevronUp,
   User,
   LogOut,
-} from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+  Contact,
+  Contact2Icon,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
@@ -37,10 +44,12 @@ const menuItems = [
   { icon: Users, label: "Connect", href: "/connect" },
   { icon: MessageSquare, label: "Forum", href: "/forum" },
   { icon: Settings, label: "Settings", href: "/settings" },
-]
+  { icon: Contact, label: "Contact", href: "/contact" },
+  { icon: User, label: "About Us", href: "/about" },
+];
 
 function AppSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Sidebar collapsible="offcanvas">
@@ -64,7 +73,11 @@ function AppSidebar() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.label}>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === item.href}
+                tooltip={item.label}
+              >
                 <Link href={item.href}>
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
@@ -89,7 +102,10 @@ function AppSidebar() {
                   <ChevronUp className="ml-auto h-4 w-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
+              <DropdownMenuContent
+                side="top"
+                className="w-[--radix-popper-anchor-width]"
+              >
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   Profile
@@ -108,11 +124,11 @@ function AppSidebar() {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
 
 interface DashboardLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -128,5 +144,5 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </main>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

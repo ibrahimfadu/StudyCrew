@@ -14,6 +14,7 @@ import { Plus, X, Brain, Clock, BookOpen, Calendar, Target } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
+import { supabase } from "@/supabase-client"
 
 interface StudyPlan {
   id: string
@@ -90,6 +91,28 @@ export default function CreatePlanPage() {
         return prev + 10
       })
     }, 200)
+
+    //Sending data to supabase
+    
+    const { error }= await supabase.from("study_plans").insert([
+      {
+        
+        subjects:subjects,
+        daily_hours:parseInt(hoursPerDay),
+        total_topics:parseInt(numTopics),
+        study_period_days:parseInt(numDays),
+        total_study_minutes:0,
+        total_study_hours:0,  
+        daily_study_minutes:0,
+        average_time_per_topic:0,
+
+      }
+    ])
+
+    if(error){
+      console.log("Error adding: ",error.message)
+    }
+    
 
     try {
       const response = await fetch("/api/generate-study-plan", {
@@ -351,18 +374,6 @@ export default function CreatePlanPage() {
                   min="1"
                   max="365"
                   required
-                />
-              </div>
-
-              {/* Additional Preferences */}
-              <div className="space-y-2">
-                <Label htmlFor="preferences">Additional Preferences (Optional)</Label>
-                <Textarea
-                  id="preferences"
-                  placeholder="Any specific requirements, preferred study times, or learning style preferences..."
-                  value={preferences}
-                  onChange={(e) => setPreferences(e.target.value)}
-                  rows={3}
                 />
               </div>
 

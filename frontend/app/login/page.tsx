@@ -12,6 +12,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
+import { supabase } from "@/supabase-client"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -25,14 +26,27 @@ export default function LoginPage() {
     setIsLoading(true)
 
     // Simulate login
-    setTimeout(() => {
+
+    const {error} = await supabase.auth.signInWithPassword({email,password})
+
+    if (error){
       setIsLoading(false)
+      setEmail("") 
+      setPassword("")
+
       toast({
-        title: "Login successful!",
-        description: "Welcome back to StudyCrew",
+        title:"Login failed",
+        description:"Your account don't exist,Sign up first"
       })
+    }
+    else{
       router.push("/dashboard")
-    }, 1000)
+      toast({
+        title:"Login Success!",
+        description:"Welcome back to your StudyCrew account."
+      })
+    }
+
   }
 
   const handleGoogleLogin = () => {

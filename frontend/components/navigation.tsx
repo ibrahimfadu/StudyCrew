@@ -1,7 +1,6 @@
 "use client"
-
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Brain } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
@@ -28,10 +27,10 @@ export function Navigation() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2 hover-scale transition-transform duration-200">
-          <Brain className="h-8 w-8 text-blue-600 animate-float" />
-          <span className="font-bold text-xl">StudyCrew</span>
-        </Link>
+      <Link href="/" className="flex items-center space-x-2 hover-scale transition-transform duration-200">
+  {/* Add logo  */}
+  <span className="font-bold text-xl">StudyCrew</span>
+</Link>
 
         <div className="flex items-center space-x-4">
           <Link href="/login">

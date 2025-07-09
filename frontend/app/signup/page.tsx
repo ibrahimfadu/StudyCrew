@@ -1,17 +1,25 @@
 "use client"
 
-import type React from "react"
-
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Brain } from "lucide-react"
-import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { supabase } from "@/supabase-client"
 import { useToast } from "@/hooks/use-toast"
+import { Button,
+  Input,
+  Label,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectContent
+ } from "@/components/ui"
+import { Brain } from "lucide-react"
+import Link from "next/link"
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -19,28 +27,55 @@ export default function SignUpPage() {
     email: "",
     phone: "",
     gender: "",
+    password: ""
   })
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate signup
-    setTimeout(() => {
-      setIsLoading(false)
-      toast({
-        title: "Account created successfully!",
-        description: "Please check your email for confirmation",
-      })
-      router.push("/mail-confirmation")
-    }, 1000)
-  }
+    const { name, email, password, phone, gender } = formData
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+          phone,
+          gender
+        }
+      }
+    })
+
+    if (error) {
+      console.log("SignUp error:", error.message)
+
+      const message = error.message.includes("already registered")
+        ? "An account with this email already exists."
+        : error.message
+
+      toast({
+        title: "Sign Up failed",
+        description: message
+      })
+      setIsLoading(false)
+      return
+    }
+
+    // ✅ Redirect to mail-confirmation page
+    toast({
+      title: "Welcome to StudyCrew"    })
+
+    router.push("/dashboard")
+    setIsLoading(false)
   }
 
   return (
@@ -53,6 +88,7 @@ export default function SignUpPage() {
           <CardTitle className="text-2xl">Join StudyCrew</CardTitle>
           <CardDescription>Create your account to get started</CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -79,6 +115,18 @@ export default function SignUpPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) => handleInputChange("password", e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
               <Input
                 id="phone"
@@ -92,7 +140,10 @@ export default function SignUpPage() {
 
             <div className="space-y-2">
               <Label htmlFor="gender">Gender</Label>
-              <Select onValueChange={(value) => handleInputChange("gender", value)} required>
+              <Select
+                required
+                onValueChange={(value) => handleInputChange("gender", value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select your gender" />
                 </SelectTrigger>
@@ -100,7 +151,6 @@ export default function SignUpPage() {
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
                   <SelectItem value="other">Other</SelectItem>
-                  <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
                 </SelectContent>
               </Select>
             </div>

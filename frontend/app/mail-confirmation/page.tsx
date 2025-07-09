@@ -1,26 +1,73 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card"
 import { CheckCircle, Mail, RefreshCw } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { supabase } from "@/supabase-client"
+import { useRouter } from "next/navigation"
+
 
 export default function MailConfirmationPage() {
   const [isResending, setIsResending] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
-  const handleResendEmail = () => {
+  const handleResendEmail = async () => {
     setIsResending(true)
-    setTimeout(() => {
-      setIsResending(false)
+
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: (await supabase.auth.getUser()).data.user?.email || '',
+    })
+
+    setIsResending(false)
+
+    if (error) {
+      toast({
+        title: "Failed to resend email",
+        description: error.message
+      })
+    } else {
       toast({
         title: "Email sent!",
         description: "Please check your inbox for the confirmation email",
       })
-    }, 1000)
+    }
   }
+
+  // ✅ Poll every 3 seconds to check if email is verified
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const { data, error } = await supabase.auth.getUser()
+
+      if (error) {
+        console.error("Error fetching user:", error.message)
+        return
+      }
+
+      const user = data?.user
+
+      if (user?.email_confirmed_at) {
+        clearInterval(interval)
+        toast({
+          title: "Email Verified",
+          description: "Redirecting to dashboard..."
+        })
+        router.push("/dashboard")
+      }
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [router, toast])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/50 px-4">
