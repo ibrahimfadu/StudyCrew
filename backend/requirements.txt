@@ -1,0 +1,6 @@
+flask
+joblib
+pandas
+datetime
+flask_cors
+scikit-learn
