@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, Bell, Palette, Clock, Shield, HelpCircle } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState({
@@ -45,6 +46,7 @@ export default function SettingsPage() {
   }
 
   return (
+    <ProtectedRoute>
     <DashboardLayout>
       <div className="space-y-6">
         <div>
@@ -255,7 +257,8 @@ export default function SettingsPage() {
             </Card>
           </div>
         </div>
-      </div>
+      </div>  
     </DashboardLayout>
-  )
+    </ProtectedRoute>
+  );
 }

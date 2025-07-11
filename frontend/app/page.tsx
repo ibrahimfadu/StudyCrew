@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Brain, Calendar, Users, Star, ArrowRight } from "lucide-react"
@@ -5,8 +7,13 @@ import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { FadeInSection } from "@/components/fade-in-section"
 import { AnimatedCounter } from "@/components/animated-counter"
+import { useState, useEffect } from "react"
+import { supabase } from "@/supabase-client"
+import { useRouter } from "next/navigation"
 
 export default function HomePage() {
+  const router=useRouter();
+
   return (
     <div className="min-h-screen bg-background page-transition">
       <Navigation />
@@ -28,11 +35,18 @@ export default function HomePage() {
           </FadeInSection>
 
           <FadeInSection delay={400}>
-            <Link href="/signup">
-              <Button size="lg" className="text-lg px-8 py-6 hover-lift hover-glow transition-all duration-300">
+              {/* Option 1: Button with router.push */}
+              {/*
+              <Button onClick={() => {router.push("/signup")}} size="lg" className="text-lg px-8 py-6 hover-lift hover-glow transition-all duration-300">
                 Get Started <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-            </Link>
+              */}
+              {/* Option 2: Next.js Link */}
+              <Link href="/signup">
+                <Button size="lg" className="text-lg px-8 py-6 hover-lift hover-glow transition-all duration-300">
+                  Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
           </FadeInSection>
 
           {/* Floating Brain Icon */}

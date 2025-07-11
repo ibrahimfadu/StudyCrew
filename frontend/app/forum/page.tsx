@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Plus, MessageSquare, ThumbsUp, CheckCircle2, Clock } from "lucide-react"
 import { useState } from "react"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function ForumPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -92,6 +93,7 @@ export default function ForumPage() {
   })
 
   return (
+    <ProtectedRoute>
     <DashboardLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -239,5 +241,6 @@ export default function ForumPage() {
         </Tabs>
       </div>
     </DashboardLayout>
-  )
+      </ProtectedRoute>
+  );
 }

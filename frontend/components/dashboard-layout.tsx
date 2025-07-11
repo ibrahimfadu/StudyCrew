@@ -1,5 +1,5 @@
 "use client";
-
+import { supabase } from "@/supabase-client";
 import type React from "react";
 import {
   Sidebar,
@@ -36,7 +36,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import { useRouter } from "next/router";
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: Plus, label: "Create Plan", href: "/create-plan" },
@@ -48,10 +48,13 @@ const menuItems = [
   { icon: User, label: "About Us", href: "/about" },
 ];
 
+
 function AppSidebar() {
   const pathname = usePathname();
 
+
   return (
+    
     <Sidebar collapsible="offcanvas">
       <SidebarHeader>
         <SidebarMenu>
@@ -114,9 +117,12 @@ function AppSidebar() {
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={async() =>{
+                  await supabase.auth.signOut();
+                 
+                }}> 
                   <LogOut className="mr-2 h-4 w-4" />
-                  Sign out
+                  Sign out.
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

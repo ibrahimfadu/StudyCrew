@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { TrendingUp, Target, Calendar, Award } from "lucide-react"
-
+import ProtectedRoute from "@/components/ProtectedRoute"
 export default function ProgressPage() {
   const weeklyData = [
     { day: "Mon", hours: 4, completed: 3 },
@@ -35,6 +35,7 @@ export default function ProgressPage() {
   const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)]
 
   return (
+    <ProtectedRoute>
     <DashboardLayout>
       <div className="space-y-6">
         <div>
@@ -178,5 +179,6 @@ export default function ProgressPage() {
         </Card>
       </div>
     </DashboardLayout>
-  )
+    </ProtectedRoute>
+  );
 }

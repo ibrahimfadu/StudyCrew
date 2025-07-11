@@ -10,6 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, UserPlus, Clock, CheckCircle, X } from "lucide-react"
 import { useState } from "react"
+import ProtectedRoute from "@/components/ProtectedRoute"
+
 
 export default function ConnectPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -119,6 +121,7 @@ export default function ConnectPage() {
   }
 
   return (
+    <ProtectedRoute>
     <DashboardLayout>
       {/* Main content container with proper spacing */}
       <div className="w-full max-w-7xl mx-auto space-y-6 relative">
@@ -298,5 +301,6 @@ export default function ConnectPage() {
         </div>
       </div>
     </DashboardLayout>
-  )
+    </ProtectedRoute>
+  );
 }

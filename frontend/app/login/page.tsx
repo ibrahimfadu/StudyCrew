@@ -36,7 +36,7 @@ export default function LoginPage() {
 
       toast({
         title:"Login failed",
-        description:"Your account don't exist,Sign up first"
+        description:"Invalid Email/Password or Your account don't exist,Sign up first"
       })
     }
     else{

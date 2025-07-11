@@ -14,6 +14,7 @@ import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/supabase-client"
 import { useRouter } from "next/navigation"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 
 export default function MailConfirmationPage() {
@@ -70,6 +71,7 @@ export default function MailConfirmationPage() {
   }, [router, toast])
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen flex items-center justify-center bg-muted/50 px-4">
       <Card className="w-full max-w-md text-center">
         <CardHeader>
@@ -114,5 +116,6 @@ export default function MailConfirmationPage() {
         </CardContent>
       </Card>
     </div>
-  )
+    </ProtectedRoute>
+  );
 }

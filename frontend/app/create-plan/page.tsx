@@ -94,25 +94,40 @@ export default function CreatePlanPage() {
 
     //Sending data to supabase
     
-    const { error }= await supabase.from("study_plans").insert([
-      {
-        
-        subjects:subjects,
-        daily_hours:parseInt(hoursPerDay),
-        total_topics:parseInt(numTopics),
-        study_period_days:parseInt(numDays),
-        total_study_minutes:0,
-        total_study_hours:0,  
-        daily_study_minutes:0,
-        average_time_per_topic:0,
+   // ✅ Get current user
+const {
+  data: { user },
+  error: userError,
+} = await supabase.auth.getUser()
 
-      }
-    ])
+if (userError || !user) {
+  toast({
+    title: "Authentication Error",
+    description: "You must be logged in to create a study plan.",
+    variant: "destructive",
+  })
+  return
+}
 
-    if(error){
-      console.log("Error adding: ",error.message)
-    }
-    
+// ✅ Insert with user_id
+const { error: insertError } = await supabase.from("study_plans").insert([
+  {
+    user_id: user.id, // 🔥 REQUIRED field
+    subject: subjects,
+    hours_per_day: parseInt(hoursPerDay),
+    total_topics: parseInt(numTopics),
+    study_days: parseInt(numDays),
+    total_study_minutes: 0,
+    total_study_hours: 0,
+    daily_study_minutes: 0,
+    time_per_topic: 0,
+  }
+])
+
+if (insertError) {
+  console.log("Error adding: ", insertError.message)
+}
+
 
     try {
       const response = await fetch("/api/generate-study-plan", {
@@ -343,6 +358,8 @@ export default function CreatePlanPage() {
                     <SelectItem value="6">6 hours</SelectItem>
                     <SelectItem value="7">7 hours</SelectItem>
                     <SelectItem value="8">8 hours</SelectItem>
+                    <SelectItem value="8">9 hours</SelectItem>
+                    <SelectItem value="8">10 hours</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

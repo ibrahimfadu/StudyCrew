@@ -1,25 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/supabase-client"
 import { useToast } from "@/hooks/use-toast"
-import { Button,
-  Input,
-  Label,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectItem,
-  SelectContent
- } from "@/components/ui"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card } from "@/components/ui/card"
+import { CardContent } from "@/components/ui/card"
+import { CardHeader } from "@/components/ui/card"
+import { CardTitle } from "@/components/ui/card"
+import { CardDescription } from "@/components/ui/card"
+import { Select } from "@/components/ui/select"
+import { SelectTrigger } from "@/components/ui/select"
+import { SelectValue } from "@/components/ui/select"
+import { SelectItem } from "@/components/ui/select"
+import { SelectContent } from "@/components/ui/select"
 import { Brain } from "lucide-react"
 import Link from "next/link"
+
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -32,6 +32,7 @@ export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -70,12 +71,43 @@ export default function SignUpPage() {
       return
     }
 
-    // ✅ Redirect to mail-confirmation page
+    const user = data.user
+    if (user) {
+      const { error: insertError } = await supabase.from("users").insert([
+        {
+          id: user.id,
+          name,
+          email,
+          phone,
+          gender
+        }
+      ])
+  
+      if (insertError) {
+        console.error("Error inserting user into users table:", insertError.message)
+        toast({
+          title: "Error saving user info",
+          description: insertError.message
+        })
+        setIsLoading(false)
+        return
+      }
+    }
+  
     toast({
-      title: "Welcome to StudyCrew"    })
-
-    router.push("/dashboard")
+      title: "Confirmation Email Sent",
+      description: "Before Login Confirm Your Email"
+    })
+  
+    router.push("/login")
     setIsLoading(false)
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      gender: "",
+      password: ""
+    })
   }
 
   return (
@@ -142,6 +174,7 @@ export default function SignUpPage() {
               <Label htmlFor="gender">Gender</Label>
               <Select
                 required
+                value={formData.gender}
                 onValueChange={(value) => handleInputChange("gender", value)}
               >
                 <SelectTrigger>
@@ -169,5 +202,5 @@ export default function SignUpPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  )   
 }
