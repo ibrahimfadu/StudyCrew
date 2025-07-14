@@ -3,4 +3,4 @@ joblib
 pandas
 datetime
 flask_cors
-scikit-learn
+scikit-learn==1.5.1

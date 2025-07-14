@@ -1,0 +1,23 @@
+# Node.js
+frontend/.env.local
+
+# Python/Flask
+backend/.env
+
+# VSCode / IDEs
+.vscode/
+.idea/
+
+# Docker
+*.log
+*.pid
+*.sqlite
+*.db
+*.tar
+*.bak
+*.swp
+
+# Virtualenv
+
+#jupyter notebook
+.ipynb_checkpoints

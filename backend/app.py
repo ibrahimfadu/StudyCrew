@@ -5,7 +5,7 @@ import joblib
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 app=Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 model_filename="model/study_schedule_model.joblib"
 loaded_model = joblib.load(model_filename)
@@ -19,20 +19,14 @@ def predict_study_time(num_subjects, hours_per_day, num_topics, num_days, loaded
     else:
         model = loaded_model
 
-    input_data = pd.DataFrame([[num_subjects, hours_per_day, num_topics, num_days]],
+    input_data = pd.DataFrame([[len(num_subjects), hours_per_day, num_topics, num_days]],
                               columns=['num_subjects', 'hours_per_day', 'num_topics', 'num_days'])
     prediction = model.predict(input_data)[0]
 
     predicted_minutes = int(max(0, round(prediction)))
-    average_time_per_topic_minutes = predicted_minutes / num_topics if num_topics > 0 else 0
-
-    # ✅ Convert to hours
     predicted_hours = round(predicted_minutes / 60, 2)
-    average_hours_per_topic = round(average_time_per_topic_minutes / 60, 2)
-
     data = {
-        "predict_hours": predicted_hours,
-        "average_hours_per_topic": average_hours_per_topic
+        "predict_hours":predicted_hours    
     }
 
     return jsonify(data)
@@ -43,14 +37,15 @@ def predict_study_time(num_subjects, hours_per_day, num_topics, num_days, loaded
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
-    num_subjects = data.get("num_subjects")
-    hours_per_day = data.get("hours_per_day")
-    num_topics = data.get("num_topics")
-    num_days = data.get("num_days")
+    num_subjects = data.get("subjects")
+    hours_per_day = data.get("hoursPerDay")
+    num_topics = data.get("numTopics")
+    num_days = data.get("numDays")
 
     if None in [num_subjects, hours_per_day, num_topics, num_days]:
-        return jsonify({"error": "Missing input values"}), 400
+        return jsonify({"error": "Missing input values"}), 402  
 
     return predict_study_time(num_subjects, hours_per_day, num_topics, num_days)
-if __name__=="__main__":
-    app.run(debug=True)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
