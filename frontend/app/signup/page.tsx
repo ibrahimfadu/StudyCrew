@@ -73,18 +73,19 @@ export default function SignUpPage() {
 
     const user = data.user
     if (user) {
-      const { error: insertError } = await supabase.from("users").insert([
+      const { data, error: insertError } = await supabase.from("user_profiles").insert([
         {
           id: user.id,
           name,
           email,
           phone,
-          gender
+          gender  
         }
       ])
   
       if (insertError) {
-        console.error("Error inserting user into users table:", insertError.message)
+        console.log("Error inserting data",insertError.message);
+
         toast({
           title: "Error saving user info",
           description: insertError.message

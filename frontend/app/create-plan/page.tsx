@@ -35,6 +35,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/supabase-client";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 interface StudyPlan {
   id: string;
@@ -55,6 +56,7 @@ interface StudyPlan {
 export default function CreatePlanPage() {
   const [subjects, setSubjects] = useState<string[]>([]);
   const [currentSubject, setCurrentSubject] = useState("");
+  const [title,setTitle] = useState("")
   const [hoursPerDay, setHoursPerDay] = useState("");
   const [numTopics, setNumTopics] = useState("");
   const [numDays, setNumDays] = useState("");
@@ -195,17 +197,18 @@ export default function CreatePlanPage() {
 
     const { error: insertError } = await supabase.from("study_plans").insert([
       {
-        user_id: user.id,
-        subject: subjects,
-        hours_per_day: parseInt(hoursPerDay),
-        total_topics: parseInt(numTopics),
-        study_days: parseInt(numDays),
-        predict_hours: prediction.totalStudyMinutes,
-      },
+    user_id: user.id,
+    title: title,  // ✅ you forgot to add this
+    subject: subjects,  // ✅ convert array to string
+    hours_per_day: parseInt(hoursPerDay),
+    total_topics: parseInt(numTopics),
+    study_days: parseInt(numDays),
+    predict_hours: prediction.totalStudyHours,  // ✅ prediction is in hours
+  },
     ]);
 
     if (insertError) {
-      console.error("Insert error:", insertError.message);
+      console.log("Insert error:", insertError.message);
     } else {
       toast({
         title: "Saved!",
@@ -217,6 +220,7 @@ export default function CreatePlanPage() {
 
   if (generatedPlan) {
     return (
+      <ProtectedRoute>
       <DashboardLayout>
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="text-center">
@@ -340,9 +344,11 @@ export default function CreatePlanPage() {
           </div>
         </div>
       </DashboardLayout>
+      </ProtectedRoute>
     );
   }
   return (
+    <ProtectedRoute>
     <DashboardLayout>
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="text-center">
@@ -365,6 +371,19 @@ export default function CreatePlanPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+   <div className="space-y-3">
+                <Label>Name your Plan </Label>
+                <div className="flex gap-2"></div>
+    <Input
+        id="title"
+        type="text"
+        placeholder="Name your study plan(study-1,eg.)"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+      /></div>
+
+
               {/* Subjects */}
               <div className="space-y-3">
                 <Label>Subjects to Study</Label>
@@ -505,5 +524,6 @@ export default function CreatePlanPage() {
         )}
       </div>
     </DashboardLayout>
+    </ProtectedRoute>
   );
 }

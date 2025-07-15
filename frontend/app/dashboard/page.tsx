@@ -1,5 +1,6 @@
 "use client"
 
+import ProtectedRoute from "@/components/ProtectedRoute"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/supabase-client"
@@ -36,6 +37,7 @@ import {
 
 interface StudyPlan {
   id: string
+  title: string
   subject: string[]
   hours_per_day: number
   total_topics: number
@@ -110,6 +112,8 @@ export default function DashboardPage() {
       completed_topics: Math.floor((progress / 100) * plan.total_topics)
     }
   }
+
+  // fetch data from data base
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -234,6 +238,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
+      <ProtectedRoute>
       <DashboardLayout>
         <div className="p-6 max-w-7xl mx-auto">
           <div className="animate-pulse space-y-8">
@@ -255,10 +260,12 @@ export default function DashboardPage() {
           </div>
         </div>
       </DashboardLayout>
+      </ProtectedRoute>
     )
   }
 
   return (
+    <ProtectedRoute>
     <DashboardLayout>
       <div className="p-6 max-w-7xl mx-auto space-y-8">
         {/* Header */}
@@ -386,7 +393,7 @@ export default function DashboardPage() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> 
         )}
 
         {/* Search and Filter */}
@@ -486,10 +493,15 @@ export default function DashboardPage() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredPlans.map((plan) => (
+              
               <Card key={plan.id} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-gradient-to-br from-white to-gray-50">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="space-y-3">
+                      <CardTitle className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-1">
+  {plan.title}
+    </CardTitle>
+
                       <div className="flex items-center gap-2">
                         <div className={`w-3 h-3 rounded-full ${getStatusColor(plan.status)}`}></div>
                         <CardTitle className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-1">
@@ -580,5 +592,6 @@ export default function DashboardPage() {
         )}
       </div>
     </DashboardLayout>
+    </ProtectedRoute>
   )
 }

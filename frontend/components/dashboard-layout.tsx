@@ -1,4 +1,5 @@
 "use client";
+import { use, useEffect } from "react";
 import { supabase } from "@/supabase-client";
 import type React from "react";
 import {
@@ -37,6 +38,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
+import { useState } from "react";
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: Plus, label: "Create Plan", href: "/create-plan" },
@@ -47,14 +49,9 @@ const menuItems = [
   { icon: Contact, label: "Contact", href: "/contact" },
   { icon: User, label: "About Us", href: "/about" },
 ];
-
-
-function AppSidebar() {
+function AppSidebar({profile}) {
   const pathname = usePathname();
-
-
   return (
-    
     <Sidebar collapsible="offcanvas">
       <SidebarHeader>
         <SidebarMenu>
@@ -101,7 +98,7 @@ function AppSidebar() {
                     <AvatarImage src="/placeholder.svg?height=24&width=24" />
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
-                  <span>John Doe</span>
+                  <span>{profile}</span>
                   <ChevronUp className="ml-auto h-4 w-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -122,7 +119,7 @@ function AppSidebar() {
                  
                 }}> 
                   <LogOut className="mr-2 h-4 w-4" />
-                  Sign out.
+                  Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -138,9 +135,25 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
+  const [profile,setProfile] = useState<string>("Welcome")
+
+  async function fetchUserName() {
+  const { data: { user }, error } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    console.log("Error fetching name:", error?.message || "No user");
+    setProfile("Welcome");
+    return;
+  }
+
+  // Use metadata name if available
+  const name = user.user_metadata?.name || "Welcome";
+  setProfile(name);
+}
+
   return (
     <SidebarProvider defaultOpen={false}>
-      <AppSidebar />
+      <AppSidebar profile={profile} />
       <SidebarInset className="flex flex-col">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40">
           <SidebarTrigger />
