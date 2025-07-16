@@ -135,7 +135,7 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [profile,setProfile] = useState<string>("Welcome")
+  const [profile,setProfile] = useState<string>("")
 
   async function fetchUserName() {
   const { data: { user }, error } = await supabase.auth.getUser();
@@ -150,6 +150,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const name = user.user_metadata?.name || "Welcome";
   setProfile(name);
 }
+  fetchUserName()
 
   return (
     <SidebarProvider defaultOpen={false}>
