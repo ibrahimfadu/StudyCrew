@@ -5,7 +5,7 @@ import joblib
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 app=Flask(__name__)
-CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+CORS(app)
 
 model_filename="model/study_schedule_model.joblib"
 loaded_model = joblib.load(model_filename)
